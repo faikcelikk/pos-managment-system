@@ -23911,7 +23911,10 @@ dl li {
   color: #0ddbb9;
 }
 .nav-item .fa-barcode{
-    padding-top:30;
+    padding-top:15;
+}
+.nav-item .fa-shopping-cart{
+    padding-top:15;
 }
 
 .horizontal-menu .bottom-navbar .page-navigation > .nav-item.active > .nav-link .menu-title,

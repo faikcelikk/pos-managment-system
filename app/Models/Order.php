@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $table='orders';
-    protected $fillable=['name','address'];
+    use HasFactory;
 
-    public function orderdetail(){
-        return $this->hasMany('App\Order_Detail');
+    protected $table = 'orders';
+    protected $fillable = ['name', 'phone', 'address', 'product_id'];
+
+    public function orderdetail()
+    {
+        return $this->hasMany(Order_Detail::class);
     }
-
 }

@@ -42,32 +42,41 @@
                                     </thead>
 
                                     <tbody>
-                                    @foreach($user as $key=>$user)
+                                    @foreach($user as $key=>$u)
                                         <tr>
                                             <td>
                                                 {{$key+1}}
                                             </td>
 
                                             <td>
-                                                {{$user->name}}
+                                                {{$u->name}}
                                             </td>
                                             <td>
-                                                {{$user->email}}
+                                                {{$u->email}}
                                             </td>
                                             <td>
-                                                @if    ($user->is_admin==1)         Admin
+                                                Yok
+                                            </td>
+                                            <td>
+                                                @if($u->is_admin==1)
+                                                    Admin
                                                 @else
                                                     Kasiyer
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="" class="mdi mdi-account-edit badge badge-outline-success">
+                                                <a href="{{route('users.edit', $u->id)}}" class="mdi mdi-account-edit badge badge-outline-success">
                                                 </a>
-                                                <a  href="" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="mdi mdi-delete badge badge-outline-danger">
-                                                </a>
+                                                <form action="{{route('users.delete', $u->id)}}" method="POST" style="display:inline-block;" onsubmit="return confirm('Silmek istediğinizden emin misiniz?');">
+                                                    @csrf
+                                                    <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                                                       <span class="mdi mdi-delete badge badge-outline-danger"></span>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

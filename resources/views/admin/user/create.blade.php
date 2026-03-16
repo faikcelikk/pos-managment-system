@@ -22,41 +22,28 @@
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
-                                    <form action="{{route('users.store',$user->id)}}" method="POST" enctype="multipart/form-data" >
+                                    <form action="{{route('users.store')}}" method="POST" enctype="multipart/form-data" >
                                         @csrf
-                                        @method('put')
                                         <div class="form-group">
                                             <label for="">İsim</label>
-                                            <input type="text" name="name" id="" value="{{$user->name}}" class="form-control">
+                                            <input type="text" name="name" id="" class="form-control" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Email</label>
-                                            <input type="text" name="email" id="" value="{{$user->email}}"  class="form-control">
-                                            <div class="form-group">
-                                                <label for="">Telefon Numarası</label>
-                                                <input type="text" name="phone" id="" value="{{$user->phone}}"  class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Şifre</label>
-                                                <input type="password" name="password" id="" value="{{$user->password}}" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Şifreyi Onayla</label>
-                                                <input type="password" name="password" id="" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Role</label>
-                                                <select name="is_admin" id="" class="form-control">
-                                                    <option value="1" @if($user->is_admin==1)
-                                                        selected
-                                                        @endif>Admin</option>
-                                                    <option value="2" @if($user->is_admin==2)
-                                                        selected
-                                                        @endif>Kasiyer</option>
-                                                </select>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Kasiyeri Ekle</button>
+                                            <input type="email" name="email" id="" class="form-control" required>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="">Şifre</label>
+                                            <input type="password" name="password" id="" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Role</label>
+                                            <select name="is_admin" id="" class="form-control">
+                                                <option value="1">Admin</option>
+                                                <option value="2">Kasiyer</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-2">Kasiyeri Ekle</button>
                                     </form>
                                     </thead>
                                 </table>

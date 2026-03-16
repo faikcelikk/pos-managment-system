@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Order_Detail;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use File;
-use Illuminate\Support\Facades\Session;
 use Picqer;
 
 class ProductController extends Controller
@@ -18,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         $product = Product::all();
-        return view('admin.product.index',compact('product'));
+        return view('admin.product.index', compact('product'));
     }
 
     /**
@@ -26,8 +25,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories=Category::all();
-        return view('admin.product.create',compact('categories'));
+        $categories = Category::all();
+        return view('admin.product.create', compact('categories'));
     }
 
     /**
@@ -35,31 +34,32 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product_code=rand(106890122,100000000);
-        $redColor='255,0,0';
+        $product_code = rand(100000000, 106890122);
+        $redColor = '255,0,0';
         $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        $barcodes=$generator->getBarcode($product_code,
-        $generator::TYPE_STANDARD_2_5,2,60);
+        $barcodes = $generator->getBarcode($product_code,
+            $generator::TYPE_STANDARD_2_5, 2, 60);
         $product = new Product();
-        $product->product_name=$request->product_name;
-        $product->description=$request->description;
-        $product->price=$request->price;
-        $product->brand=$request->brand;
-        $product->quantity=$request->quantity;
-        $product->product_code=$product_code;
-        $product->barcode=$barcodes;
+        $product->product_name = $request->product_name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->brand = $request->brand;
+        $product->quantity = $request->quantity;
+        $product->product_code = $product_code;
+        $product->barcode = $barcodes;
         //$product->alert_stock=$request->alert_stock;
-        $product->category_id=$request->category;
+        $product->category_id = $request->category;
 
-        if($request->hasFile('image')){
-            $image=$request->image;
-            $imeganame=time().'.'.$image->getClientOriginalExtension();
-            $request->image->move(public_path('uploads'),$imeganame);
-            $product->image='uploads/'.$imeganame;
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $imeganame = time() . '.' . $image->getClientOriginalExtension();
+            $request->image->move(public_path('uploads'), $imeganame);
+            $product->image = 'uploads/' . $imeganame;
         }
         $product->save();
 
-        return redirect()->route('products.index')->with('success','Ürün başarıyla eklendi.');;
+        return redirect()->route('products.index')->with('success', 'Ürün başarıyla eklendi.');
+        ;
     }
 
     /**
@@ -67,7 +67,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+    //
     }
 
     /**
@@ -75,71 +75,69 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product=Product::find($id);
-        $categories=Category::get();
-        return view('admin.product.update',compact('product','categories'));
+        $product = Product::find($id);
+        $categories = Category::get();
+        return view('admin.product.update', compact('product', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $product_code=rand(106890122,100000000);
-        $redColor='255,0,0';
-        $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        $barcodes=$generator->getBarcode($product_code,
-        $generator::TYPE_STANDARD_2_5,2,60);
-
         $product = Product::findOrFail($id);
-        $product->product_name=$request->product_name;
-        $product->description=$request->description;
-        $product->price=$request->price;
-        $product->brand=$request->brand;
-        $product->quantity=$request->quantity;
-        $product->product_code=$product_code;
-        $product->barcode=$product_code . 'jpg';
-        //$product->alert_stock=$request->alert_stock;
-        $product->category_id=$request->category;
 
-        if($request->hasFile('image')){
-            $image=$request->image;
-            $imeganame=time().'.'.$image->getClientOriginalExtension();
-            $request->image->move(public_path('uploads'),$imeganame);
-            $product->image='uploads/'.$imeganame;
+        // Sadece ürün kodu değiştirilmek isteniyorsa yeni barcode üret,
+        // aksi hâlde mevcut kodu koru
+        if ($request->has('regenerate_barcode')) {
+            $product_code = rand(100000000, 106890122);
+            $generator    = new Picqer\Barcode\BarcodeGeneratorHTML();
+            $barcodes     = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 2, 60);
+            $product->product_code = $product_code;
+            $product->barcode      = $barcodes;
+        }
+
+        $product->product_name = $request->product_name;
+        $product->description  = $request->description;
+        $product->price        = $request->price;
+        $product->brand        = $request->brand;
+        $product->quantity     = $request->quantity;
+        $product->category_id  = $request->category;
+
+        if ($request->hasFile('image')) {
+            $image     = $request->image;
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $request->image->move(public_path('uploads'), $imageName);
+            $product->image = 'uploads/' . $imageName;
         }
         $product->save();
 
-        return redirect()->route('products.index')->with('success','Ürün başarıyla güncellendi.');;
+        return redirect()->route('products.index')->with('success', 'Ürün başarıyla güncellendi.');
     }
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
-        $request->validate([
-            'id' => 'distinct'
-        ]);
-
-        $product = Product::find($request->id); // Sileceğiniz ürünü veritabanından alın
+        $product = Product::find($id);
 
         if ($product) {
-            $product->delete(); // Ürünü sil
-            $order=Order::where('product_id',$product->id);
-            $order->delete();
-            return redirect()->route('products.index')->with('success','Ürün başarıyla silindi.');;
+            // Ürüne ait sipariş detaylarını sil (doğru tablo)
+            Order_Detail::where('product_id', $product->id)->delete();
+            $product->delete();
+            return redirect()->route('products.index')->with('success', 'Ürün başarıyla silindi.');
         }
-        return redirect()->route('products.index');
+
+        return redirect()->route('products.index')->with('error', 'Ürün bulunamadı.');
     }
     public function destroy(Product $product)
     {
-        //
+    //
     }
     public function GetBarcodes(Request $request)
     {
-        $productsBarcode=Product::where('barcode','product_code')->get();
-        return view('admin.product.barcode.index',compact('productsBarcode'));
+        $productsBarcode = Product::select('barcode', 'product_code', 'product_name', 'price')->get();
+        return view('admin.product.barcode.index', compact('productsBarcode'));
     }
 }
-

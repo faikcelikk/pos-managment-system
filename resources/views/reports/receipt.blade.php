@@ -31,31 +31,32 @@
 
                 </tr>
 
-                @foreach($order_receipt as $receipt  )
-                <tr class="service">
-                    <td class="tableitem"><p class="itemtext">{{$receipt->product_name}}</p></td>
-                    <td class="tableitem"><p class="itemtext">{{number_format($receipt->unitprice,2)}}</p> </td>
-                    <td class="tableitem"><p class="itemtext">{{$receipt->quantity}}</p></td>
-                    <td class="tableitem"><p class="itemtext">{{$receipt->discount ? '':'0'}}</p></td>
-                    <td class="tableitem"><p class="itemtext">{{number_format($receipt->amount,2)}}</p></td>
-                </tr>
-                @endforeach
-                <tr class="tabletitle">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="Rate"><p class="itemtext">Vergi</p></td>
-                    <td class="Payment"><p class="itemtext">Total ${{number_format($receipt->amount,2)}}</p></td>
-                </tr>
-                <tr class="tabletitle">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="Rate">Toplam</td>
-                    <td class="Payment">{{number_format($orders_receipt->sum('amount'),2)}}<h2>
-                        </h2></td>
-                </tr>
-
+                @if(!empty($order_receipt) && is_iterable($order_receipt))
+                    @foreach($order_receipt as $receipt  )
+                    <tr class="service">
+                        <td class="tableitem"><p class="itemtext">{{$receipt->product_name}}</p></td>
+                        <td class="tableitem"><p class="itemtext">{{number_format($receipt->unitprice,2)}}</p> </td>
+                        <td class="tableitem"><p class="itemtext">{{$receipt->quantity}}</p></td>
+                        <td class="tableitem"><p class="itemtext">{{$receipt->discount ? '':'0'}}</p></td>
+                        <td class="tableitem"><p class="itemtext">{{number_format($receipt->amount,2)}}</p></td>
+                    </tr>
+                    @endforeach
+                    <tr class="tabletitle">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="Rate"><p class="itemtext">Vergi</p></td>
+                        <td class="Payment"><p class="itemtext">Total ${{number_format($order_receipt->sum('amount') ?? 0, 2)}}</p></td>
+                    </tr>
+                    <tr class="tabletitle">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="Rate">Toplam</td>
+                        <td class="Payment">{{number_format($order_receipt->sum('amount') ?? 0, 2)}}<h2>
+                            </h2></td>
+                    </tr>
+                @endif
             </table>
             <div class="legalcopy">
                 <p class="legal"><strong>***Tesekkürler</strong></p>

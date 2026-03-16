@@ -1,177 +1,176 @@
 @extends('front.master')
+@section('title', 'Sipariş Listesi')
 @section('content')
-    <head>
-        <style type="text/css">
-            .table_t{
-                margin:auto;
-                width: 100%;
-                margin-top: 20px;
+<div class="main-panel">
+    <div class="content-wrapper">
 
-            }
-        </style>
-    </head>
-    <div class="main-panel">
-        <div class="content-wrapper">
+        @if(session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Başarılı!</strong> {{ session()->get('success') }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        @endif
 
-            @if(session()->has('message'))
-                <div class="alert alert-success">
-                    <strong>Başarılı!</strong>
-                    {{session()->get('message')}}
-                </div>
-            @endif
-                <li class="col-2 width-right nav-item dropdown d-none d-lg-block">
-                    <a href="{{route('orders.create')}}" type="button" class="nav-link btn btn-success create-new-button">+ Yeni sipariş Ekle</a>
-                </li>
-                <br>
-            <div class="row ">
-                <div class="col-12 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success">{{ session('success') }}</div>
-                            @endif
-                            <div class="col-12 grid-margin">
-                                <h4 class="card-title">Sipariş Listesi</h4>
-                                <table class="table_t">
-                                    <thead>
+        @if(session()->has('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Hata!</strong> {{ session()->get('error') }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        @endif
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">Sipariş Listesi</h4>
+            <a href="{{ route('orders.create') }}" class="btn btn-success">
+                <i class="mdi mdi-plus"></i> Yeni Sipariş Ekle
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <th> Sipariş Adı </th>
-                                        <th> Ürünün resmi </th>
-                                        <th> indirim(%)</th>
-                                        <th> Marka </th>
-                                        <th> Fiyat</th>
+                                        <th>#</th>
+                                        <th>Müşteri Adı</th>
+                                        <th>Telefon</th>
+                                        <th>Tarih</th>
+                                        <th>İşlemler</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($orders as $orders)
+                                </thead>
+                                <tbody>
+                                    @forelse($orders as $order)
                                         <tr>
-                                            @foreach($product as $product)
-                                            <td> {{ $product->product_name }}</td>
+                                            <td>{{ $order->id }}</td>
+                                            <td>{{ $order->name }}</td>
+                                            <td>{{ $order->phone ?? '-' }}</td>
+                                            <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
                                             <td>
-                                                <br>
-                                                <img height="100" width="100" src="{{asset($product->image)}}" >
-                                                <br>
-                                            </td>
-                                                <td>{{ $product->quantity }}</td>
-                                                <td> {{ $product->brand }}</td>
-                                                <td> {{ $product->price }}</td>
-                                            @endforeach
-                                            <td>
-                                                <a href="{{route('orders.edit',$orders->id)}}" class="mdi mdi-account-edit badge badge-outline-success" title="siparişi düzenle">
+                                                <a href="{{ route('orders.edit', $order->id) }}"
+                                                   class="btn btn-sm btn-outline-primary"
+                                                   title="Düzenle">
+                                                    <i class="mdi mdi-account-edit"></i>
                                                 </a>
-                                                <a  href="{{route('orders.delete',$orders->id)}}" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="mdi mdi-delete badge badge-outline-danger" title="sil">
-                                                </a>
+
+                                                {{-- DELETE: POST form --}}
+                                                <form action="{{ route('orders.delete', $order->id) }}"
+                                                      method="POST" style="display:inline-block;"
+                                                      onsubmit="return confirm('Siparişi silmek istediğinizden emin misiniz?')">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Sil">
+                                                        <i class="mdi mdi-delete"></i>
+                                                    </button>
+                                                </form>
+
+                                                <button type="button"
+                                                        onclick="printReceipt({{ $order->id }})"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Yazdır">
+                                                    <i class="fa fa-print"></i>
+                                                </button>
                                             </td>
-                                               @endforeach
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                Henüz sipariş bulunmamaktadır.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col md-3">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>TOTAL 0.00</h4>
+                </div>
+            </div>
+        </div>
+
+        {{-- Ödeme Paneli --}}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Ödeme Bilgileri</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <label>Ödeme Yöntemi</label><br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="cash" value="cash" checked>
+                                    <label class="form-check-label" for="cash">
+                                        <i class="fa fa-money-bill text-success"></i> Peşin
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="transfer" value="bank_transfer">
+                                    <label class="form-check-label" for="transfer">
+                                        <i class="fa fa-university text-danger"></i> Havale
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="card" value="credit_card">
+                                    <label class="form-check-label" for="card">
+                                        <i class="fa fa-credit-card text-info"></i> Kart
+                                    </label>
+                                </div>
                             </div>
-                                <div class="panel">
-                                    <div class="row">
-                                        <table class="table table-striped">
-                                            <tr>
-                                                <td>
-                                                    <label for=""><Müsteri adi</label>
-                                                    <input type="text" name="customer_name" id="" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <label for=""><Müsteri telefonu</label>
-                                                    <input type="text" name="customer_phone" id="" class="form-control">
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                        <td>ödeme yöntemi</td>
-                                        <span class="radio-item">
-
-<input type="radio" name="payment method" id="payment method"
-    class="true" value="cash" checked="checked">
-<label for="payment method"> <i class="fa fa-money-bill text-success"></i> pesin</label>
-</span>
-
-<span class="radio-item">
-<input type="radio" name="payment method" id="payment method" class="true" value="bank transfer" checked="checked">
-<label for="payment method"> <i class="fa fa-university text-danger"></i>transfer </label>
-</span>
-
-<span class="radio-item">
-
-<input type="radio" name="payment method" id="payment method"
-
-       class="true" value="credit Card" checked="checked">
-
-<label for="payment method"> <i class="fa fa-credit-card text-info"></i> kart</label>
-
-</span>
- </td> <br>
-                                        <td>
-                                            ödeme
-                                            <input type="number" name="paid_amount" class="form-control">
-                                        </td>
-                                        <td>
-                                         degisiklik
-                                            <input type="number" name="balance" class="form-control">
-                                        </td>
-  </div>
-                                    </div>
-                            <div class="card-body">
-                      <button type="button"
-                                   onlick="PrintReceiptContent('print')"
-                                   class="btn btn-dark"><i class="fa fa-print"></i>Yazdir
-                               </button>
-                                <button type="button"
-                                        onlick="PrintReceiptContent('print')"
-                                        class="btn btn-primary"><i class="fa fa-print"></i>tarih
-                                </button>
-                                <button type="button"
-                                        onlick="PrintReceiptContent('print')"
-                                        class="btn btn-danger"><i class="fa fa-print"></i>rapor
-                                </button>
+                        </div>
+                        <div class="form-group row mt-2">
+                            <div class="col-6">
+                                <label>Ödenen Tutar</label>
+                                <input type="number" id="paid_amount_display" class="form-control" placeholder="0.00">
+                            </div>
+                            <div class="col-6">
+                                <label>Para Üstü</label>
+                                <input type="number" id="balance_display" class="form-control" placeholder="0.00" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-                <div class="modal">
-                    <div id="print">
+        {{-- Fiş Yazdırma Modali --}}
+        <div class="modal fade" id="receiptModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sipariş Fişi</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="receiptContent">
                         @include('reports.receipt')
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" onclick="window.print()">
+                            <i class="fa fa-print"></i> Yazdır
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    </div>
                 </div>
-                </div>
-                / Print Section
+            </div>
+        </div>
 
-                function PrintReceiptContent(el) {
+    </div>
+</div>
 
-                var data =<input type="button" id="printPageButton'+
-                 'class=" printPageButton" style="display:block;'+
-                'width="100%";border:none;background-color:#00BB8B; color:#fff'+
-                'padding:14px 28px;font-size:16px; cursor:pointer;text-align:center
+<script>
+    // Bildirimleri 5 saniye sonra kapat
+    setTimeout(function () {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function (el) {
+            el.style.transition = 'opacity 0.5s';
+            el.style.opacity = '0';
+            setTimeout(function () { el.style.display = 'none'; }, 500);
+        });
+    }, 5000);
 
-                    data += document.getElementById(el).innerHTML;
-                myReceipt.document.title="Print Receipt";
-
-                myReceipt = window.open("", "myWin", "left-150, top-130, width=400, height=400
-
-                myReceipt.screnx = 0;
-
-                myReceipt.screny = 0;
-
-                <script>
-                    setTimeout(function() {
-                        var messageElement = document.querySelector('.alert');
-                        if (messageElement) {
-                            messageElement.style.display = 'none';
-                        }
-                    }, 5000);
-
-                </script>
+    // Fiş yazdırma
+    function printReceipt(orderId) {
+        $('#receiptModal').modal('show');
+    }
+</script>
 @endsection
-

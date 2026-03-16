@@ -58,15 +58,6 @@
                                             <label >Miktar</label>
                                             <input min="1" type="number" name="quantity" value="{{$product->quantity}}" class="form-control" required="" placeholder="Ürün miktarı giriniz" >
                                         </div>
-                                        <div class="form-group">
-                                            <label>Kategori</label>
-                                            <select class="form-control" name="category" required>
-                                                <option value="">ürün kategorisi seçin..</option>
-                                                @foreach ($categories as $category)
-                                                    <option @if($product->category_id == $category->id) selected @endif value="{{$category->id}}">{{$category->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
 
                                         <button type="submit" class="btn btn-primary">Ürünü Güncelle</button>
                                     </form>

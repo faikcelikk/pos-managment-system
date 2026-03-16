@@ -58,8 +58,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->name = $request->category;
+        $category->save();
+
+        return redirect()->route('category.index')->with('success', 'Kategori başarıyla güncellendi.');
     }
+
     public function delete($id)
     {
         $category = Category::find($id); // Sileceğiniz ürünü veritabanından al

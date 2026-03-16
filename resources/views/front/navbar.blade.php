@@ -13,7 +13,7 @@
                             <span class="count bg-success">2</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                            <p class="mb-0 font-weight-normal float-left dropdown-header">Bildirimler</p>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-success">
@@ -21,9 +21,9 @@
                                     </div>
                                 </div>
                                 <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                                    <h6 class="preview-subject font-weight-normal">Uygulama Hatası</h6>
                                     <p class="font-weight-light small-text mb-0 text-muted">
-                                        Just now
+                                        Şimdi
                                     </p>
                                 </div>
                             </a>
@@ -34,9 +34,9 @@
                                     </div>
                                 </div>
                                 <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                                    <h6 class="preview-subject font-weight-normal">Ayarlar</h6>
                                     <p class="font-weight-light small-text mb-0 text-muted">
-                                        Private message
+                                        Özel mesaj
                                     </p>
                                 </div>
                             </a>
@@ -47,9 +47,9 @@
                                     </div>
                                 </div>
                                 <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                                    <h6 class="preview-subject font-weight-normal">Yeni kullanıcı kaydı</h6>
                                     <p class="font-weight-light small-text mb-0 text-muted">
-                                        2 days ago
+                                        2 gün önce
                                     </p>
                                 </div>
                             </a>
@@ -61,7 +61,7 @@
                             <span class="count bg-primary">4</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                            <p class="mb-0 font-weight-normal float-left dropdown-header">Mesajlar</p>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <img src="{{asset('template/')}}/images/faces/face4.jpg" alt="image" class="profile-pic">
@@ -70,7 +70,7 @@
                                     <h6 class="preview-subject ellipsis font-weight-normal">David Grey
                                     </h6>
                                     <p class="font-weight-light small-text text-muted mb-0">
-                                        The meeting is cancelled
+                                        Toplantı iptal edildi
                                     </p>
                                 </div>
                             </a>
@@ -82,7 +82,7 @@
                                     <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
                                     </h6>
                                     <p class="font-weight-light small-text text-muted mb-0">
-                                        New product launch
+                                        Yeni ürün tanıtımı
                                     </p>
                                 </div>
                             </a>
@@ -94,7 +94,7 @@
                                     <h6 class="preview-subject ellipsis font-weight-normal"> Johnson
                                     </h6>
                                     <p class="font-weight-light small-text text-muted mb-0">
-                                        Upcoming board meeting
+                                        Yaklaşan yönetim kurulu toplantısı
                                     </p>
                                 </div>
                             </a>
@@ -106,19 +106,19 @@
 
                 </ul>
                 <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo" href="index.html"><img src="https://www.connectpos.com/wp-content/uploads/shopify-pos.png" style="width:170px;height: 170px" alt="logo"/></a>
-                    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="https://www.connectpos.com/wp-content/uploads/shopify-pos.png" style="width:80px;height: 80px" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo" href="{{route('panel')}}"><img src="{{asset('logo.png')}}" style="width: auto; height: 60px; object-fit: contain;" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo-mini" href="{{route('panel')}}"><img src="{{asset('logo.png')}}" style="width: auto; height: 40px; object-fit: contain;" alt="logo"/></a>
                 </div>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown  d-lg-flex d-none">
-                        <button type="button" class="btn btn-inverse-primary btn-sm">Product </button>
+                        <button type="button" class="btn btn-inverse-primary btn-sm">Ürün </button>
                     </li>
                     <li class="nav-item dropdown d-lg-flex d-none">
                         <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="nreportDropdown" href="#" data-bs-toggle="dropdown">
-                            Reports
+                            Raporlar
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="nreportDropdown">
-                            <p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
+                            <p class="mb-0 font-weight-medium float-left dropdown-header">Raporlar</p>
                             <a class="dropdown-item">
                                 <i class="mdi mdi-file-pdf text-primary"></i>
                                 Pdf
@@ -130,7 +130,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown d-lg-flex d-none">
-                        <button type="button" class="btn btn-inverse-primary btn-sm">Settings</button>
+                        <button type="button" class="btn btn-inverse-primary btn-sm">Ayarlar</button>
                     </li>
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
@@ -141,11 +141,11 @@
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item">
                                 <i class="mdi mdi-settings text-primary"></i>
-                                Settings
+                                Ayarlar
                             </a>
                             <a class="dropdown-item">
                                 <i class="mdi mdi-logout text-primary"></i>
-                                Logout
+                                Çıkış Yap
                             </a>
                         </div>
                     </li>
@@ -185,6 +185,13 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('orders.index')}}" class="nav-link">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="menu-title">Siparişler</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('products.barcode')}}" class="nav-link">
                         <i class="fa fa-barcode"></i>
                         <span class="menu-title">Barkodlar</span>
@@ -206,8 +213,8 @@
                     </a>
                     <div class="submenu">
                         <ul class="submenu-item">
-                            <li class="nav-item"><a class="nav-link" href="{{asset('template/')}}/pages/samples/login-2.html">Login</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{asset('template/')}}/pages/samples/register-2.html">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{asset('template/')}}/pages/samples/login-2.html">Giriş</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{asset('template/')}}/pages/samples/register-2.html">Kayıt Ol</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{route('admin.login')}}">Admin Giriş</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{route('admin.logout')}}">Çıkış</a></li>
                         </ul>
