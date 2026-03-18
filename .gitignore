@@ -3,7 +3,9 @@
 /public/build
 /public/hot
 /public/storage
+/public/uploads
 /storage/*.key
+/storage/logs
 /vendor
 .env
 .env.backup
@@ -17,3 +19,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/duzenlemeler
